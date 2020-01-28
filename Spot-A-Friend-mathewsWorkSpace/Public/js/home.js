@@ -36,15 +36,18 @@ $(document).ready(function() {
     $.get("/spotAFriends/posts", function(data) {
       if (data) {
         for (var i = 0; i < data.length; i++) {
-          $("#appendCard").prepend(
-            '<div class="card gedf-card"><div class="card-header"><div class="d-flex justify-content-between align-items-center"><div class="d-flex justify-content-between align-items-center"><div class="mr-2"><img class="rounded-circle" width="45" src="" alt="" /></div><div class="ml-2"><div class="h5 m-0">@' +
+          let card = '<div class="card gedf-card"><div class="card-header"><div class="d-flex justify-content-between align-items-center"><div class="d-flex justify-content-between align-items-center"><div class="mr-2"><img class="rounded-circle" width="45" src="" alt="" /></div><div class="ml-2"><div class="h5 m-0">@' +
               data[i].username +
               '</div></div></div></div></div><div class="card-body"><div class="text-muted h7 mb-2"><i class="fa fa-clock-o"></i>' +
               data[i].createdAt +
-              '</div><p class="card-text">' +
-              data[i].text +
-              "</p></div></div>"
-          );
+              '</div><p class="card-text">';
+          if (data[i].text.includes('http'))
+            card += `<audio controls="controls">
+                      <source src="${data[i].text}" />
+                    </audio></p></div></div>`;
+          else
+            card += data[i].text + "</p></div></div>";
+          $("#appendCard").prepend(card);
         }
       }
     });
